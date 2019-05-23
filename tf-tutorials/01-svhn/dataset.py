@@ -27,7 +27,7 @@ class Dataset():
             train_meta = ([os.path.join(self.dataset_path, 'train_32x32.mat'),
                            os.path.join(self.dataset_path, 'extra_32x32.mat')], 604388)
         else:
-            train_meta = ([os.path.join(self.dataset_path, 'train_32x32.mat')], 73257)
+            train_meta = ([os.path.join(self.dataset_path, 'train_32x32.mat')], 10000)
 
         dataset_meta = {
             'train': train_meta,
@@ -36,11 +36,16 @@ class Dataset():
         self.files, self.instances = dataset_meta[dataset_name]
 
     def load(self):
+        cnt_m=[500,13861,10585,8497,7458,6882,5727,5595,500,500]
+        cnt=[0,0,0,0,0,0,0,0,0,0]
         datas_list, labels_list = [], []
         for f in self.files:
             samples = scio.loadmat(f)
-            datas_list.append(samples['X'])
-            labels_list.append(samples['y'])
+            y=samples['y']
+            if cnt[y]<cnt_m[y]:
+                datas_list.append(samples['X'])
+                labels_list.append(samples['y'])
+                cnt[y]+=1
         datas = np.concatenate(datas_list, axis=3)
         labels = np.concatenate(labels_list, axis=0)
         self.samples_mat = {
