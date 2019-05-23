@@ -38,7 +38,7 @@ class Dataset():
         for f in self.files:
             samples = scio.loadmat(f)
             y=samples['y']
-            idx=y[0]%10
+            idx=int(y[0]%10)
             if cnt[idx]<cnt_m[idx]:
                 datas_list.append(samples['X'])
                 labels_list.append(y)
