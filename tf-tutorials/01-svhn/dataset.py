@@ -44,8 +44,13 @@ class Dataset():
             y=samples['y']
             if cnt[y]<cnt_m[y]:
                 datas_list.append(samples['X'])
-                labels_list.append(samples['y'])
+                labels_list.append(y)
                 cnt[y]+=1
+        state=np.random.get_state()
+        np.random.shuffle(datas_list)
+        np.random.set_state(state)
+        np.random.shuffle(labels_list)
+        
         datas = np.concatenate(datas_list, axis=3)
         labels = np.concatenate(labels_list, axis=0)
         self.samples_mat = {
