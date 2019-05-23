@@ -42,10 +42,11 @@ class Dataset():
         for f in self.files:
             samples = scio.loadmat(f)
             y=samples['y']
-            if cnt[y]<cnt_m[y]:
+            idx=y[0]%10
+            if cnt[idx]<cnt_m[idx]:
                 datas_list.append(samples['X'])
                 labels_list.append(y)
-                cnt[y]+=1
+                cnt[idx]+=1
         state=np.random.get_state()
         np.random.shuffle(datas_list)
         np.random.set_state(state)
