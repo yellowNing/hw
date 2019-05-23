@@ -36,11 +36,22 @@ class Dataset():
         self.files, self.instances = dataset_meta[dataset_name]
 
     def load(self):
+        cnt_m=[500,13861,10585,8497,7458,6882,5727,5595,500,500]
+        cnt=[0,0,0,0,0,0,0,0,0,0]
         datas_list, labels_list = [], []
         for f in self.files:
             samples = scio.loadmat(f)
-            datas_list.append(samples['X'])
-            labels_list.append(samples['y'])
+            y=samples['y']
+            idx=y[0]%10
+            if cnt[idx]<cnt_m[idx]:
+                datas_list.append(samples['X'])
+                labels_list.append(y)
+                cnt[idx]+=1
+        state=np.random.get_state()
+        np.random.shuffle(datas_list)
+        np.random.set_state(state)
+        np.random.shuffle(labels_list)
+        
         datas = np.concatenate(datas_list, axis=3)
         labels = np.concatenate(labels_list, axis=0)
         self.samples_mat = {
